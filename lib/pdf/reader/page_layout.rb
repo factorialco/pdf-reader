@@ -18,6 +18,9 @@ class PDF::Reader
       @mean_font_size   = mean(@runs.map(&:font_size)) || DEFAULT_FONT_SIZE
       @mean_font_size = DEFAULT_FONT_SIZE if @mean_font_size == 0
       @mean_glyph_width = mean(@runs.map(&:mean_character_width)) || 0
+
+      raise MalformedPDFError, "PDF has a mean_glyph_width < 1" if @mean_glyph_width < 1
+
       @page_width  = mediabox[2] - mediabox[0]
       @page_height = mediabox[3] - mediabox[1]
       @x_offset = @runs.map(&:x).sort.first
